@@ -4,25 +4,17 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.denizhan.householder.ExternalTools.InstanceHolder;
 import com.denizhan.householder.R;
 
 public class Prompter extends Dialog {
 
-    private Button exitButton;
-
-    public Prompter(InstanceHolder ih){
+    public Prompter(InstanceHolder ih, int layout_id){
         super((Context) ih.activityInstance);
-        super.setContentView(R.layout.prompter_view);
+        super.setContentView(layout_id);
         super.setCanceledOnTouchOutside(true);
-        exitButton = findViewById(R.id.exit_button);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
     }
 
     public void show(){
@@ -32,6 +24,5 @@ public class Prompter extends Dialog {
     public void dismiss(){
         Prompter.super.dismiss();
     }
-
 
 }
