@@ -14,7 +14,7 @@ public class MessageManager {
 
     private InstanceHolder ih;
 
-    int lastPlayedViewID = 0; // hold this number to add view hierarchy element from top down
+    int lastPlayedViewID = 0;
     private TextPrompter textPrompter;
     private AudioPrompter audioPrompter;
     private VideoPrompter videoPrompter;
