@@ -25,11 +25,9 @@ public class UDPSender {
     private DatagramPacket sendingPacket;
 
     public UDPSender(String ipAdress){
-         try {
-            sendingSocket = new DatagramSocket(4005);
-            //byte[] ipAddr = new byte[]{127, 0, 0, 1};
-             // InetAddress addr = InetAddress.getByAddress(ipAddr);
-            local_address = InetAddress.getByName(ipAdress);//karsi tarafin ipsi
+        try {
+            sendingSocket = new DatagramSocket();
+            local_address = InetAddress.getByName("192.168.43.1");//karsi tarafin ipsi
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (SocketException e) {
@@ -40,13 +38,13 @@ public class UDPSender {
     public void send(byte[] data){
 
         // paketi veri boyutuna göre guncelle
-        sendingPacket = new DatagramPacket(data, data.length, local_address, 4004);
+        sendingPacket = new DatagramPacket(data, data.length, local_address, 4445);
         try {
             sendingSocket.send(sendingPacket); // sokete veri yollama
         } catch (IOException e) {
             e.printStackTrace();
             // OlaGan hata paketin veri boyutunun udp buyuk olması
-           }
+        }
     }
     public void sendCommand(COMMANDS command){
         sendingPacket = new DatagramPacket(command.toString().getBytes(), command.toString().getBytes().length, local_address, 4004); // paketi veri boyutuna göre güncelle
