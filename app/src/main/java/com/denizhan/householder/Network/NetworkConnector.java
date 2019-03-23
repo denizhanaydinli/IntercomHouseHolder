@@ -6,11 +6,18 @@ package com.denizhan.householder.Network;
     almaya yaracak class.
 */
 
-import com.denizhan.householder.Network.Tools.MessageQueue;
-import java.io.File;
-import java.io.FileInputStream;
+import android.util.Log;
+
+import com.denizhan.householder.ExternalTools.InstanceHolder;
+import com.denizhan.householder.Network.Tools.COMMANDS;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class NetworkConnector {
+
+    private InstanceHolder ih;
 
     private UDPSender udpSender;
     private UDPReceiver udpReceiver;
@@ -19,27 +26,21 @@ public class NetworkConnector {
     private Runnable sendingRunnable, receivingRunnable;
     private boolean sending,  receiving;
 
-    private boolean SEND_REALTIME_DATA = false;
-    private boolean SEND_UPDATES = false;
-    private MessageQueue messageQueue;
-
-    // baglanilacak ip adresini al
-
-    private NetworkConnector(String ipAdress){
+    public NetworkConnector(String ipAdress, InstanceHolder ih){
         this.udpSender = new UDPSender(ipAdress);
         this.udpReceiver = new UDPReceiver();
+        this.ih = ih;
         initialize();
-        messageQueue = new MessageQueue();
     }
 
     public void initialize(){
-        // veri gönderme metodunu seç
         sendingRunnable = new Runnable() {
             @Override
             public void run() {
                 try {
                     while(sending){
                         send();
+                        Thread.sleep(75);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -47,7 +48,7 @@ public class NetworkConnector {
             }
         };
         sendingThread = new Thread(sendingRunnable);
-        // veri alma metodunu seç
+
         receivingRunnable = new Runnable() {
             @Override
             public void run()  {
@@ -62,17 +63,16 @@ public class NetworkConnector {
         };
         receivingThread = new Thread(receivingRunnable);
     }
-    private void start(){
-        //veri gondermeye basla
+
+    public void start(){
         sending = true;
         sendingThread.start();
 
-        //veri almaya basla
         receiving = true;
         receivingThread.start();
     }
 
-    private void stop(){
+    public void stop(){
         sending = false;
         receiving = false;
     }
@@ -85,49 +85,53 @@ public class NetworkConnector {
         receivingThread = null;
     }
 
-    private void send()throws InterruptedException{
-      //buralara gonderme yapilacak
-        //data byte ların arraylik eleman olarak gonderilmelerini sagliycak
-        if (SEND_REALTIME_DATA) {
-            // gerçek zamanlı görüntü ve video gönder
-        }
+    private void send() {
 
-        if(SEND_UPDATES) {
-            while(!messageQueue.ringNotificationQueue.isEmpty()) {
-                // queue boşalana kadar updateleri gönder
-            }
-            while(!messageQueue.textMessageQueue.isEmpty()){
-                // queue boşalana kadar updateleri gönder
-            }
-            while(!messageQueue.audioMessageQueue.isEmpty()){
-                // queue boşalana kadar updateleri gönder
-            }
-            while(!messageQueue.videoMessageQueue.isEmpty()){
-                // queue boşalana kadar updateleri gönder
-            }
-            SEND_UPDATES = false;
-        }
     }
 
-    private void receive(){
-     //alma islemleri yapilacak
+    private void receive() throws IOException {
         byte [] data = udpReceiver.receive();
+        String data_as_str = new String(data);
+        if(COMMANDS.TEXT_BEGIN.eqauls(data_as_str)){
+            data = udpReceiver.receive();
+            data_as_str = new String(data);
+            while(!COMMANDS.TEXT_END.eqauls(data_as_str)){
+                ih.activityInstance.messageManager.addTextMessage("~2dk önce", data_as_str);
+                data = udpReceiver.receive();
+                data_as_str = new String(data);
+            }
+        } else if(COMMANDS.AUDIO_BEGIN.eqauls(data_as_str)){
+            data = udpReceiver.receive();
+            data_as_str = new String(data);
+            while(!COMMANDS.AUDIO_END.eqauls(data_as_str)){
+                writeDataToFile("/storage/emulated/0/sample" + "0" + ".3gp", data);
+                ih.activityInstance.messageManager.addAudioMessage("~5sn önce", "/storage/emulated/0/sample" + "0" + ".3gp");
+                data = udpReceiver.receive();
+                data_as_str = new String(data);
+            }
+        } else if(COMMANDS.VIDEO_BEGIN.eqauls(data_as_str)){
+            data = udpReceiver.receive();
+            data_as_str = new String(data);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            while(!COMMANDS.VIDEO_END.eqauls(data_as_str)){
+                byteArrayOutputStream.write(data);
+                data = udpReceiver.receive();
+                data_as_str = new String(data);
+            }
+            Log.e("***", byteArrayOutputStream.toByteArray().length + " TOTAL");
+            writeDataToFile("/storage/emulated/0/video" + "0" + ".mp4", byteArrayOutputStream.toByteArray());
+            ih.activityInstance.messageManager.addVideoMessage("~1dk önce", "/storage/emulated/0/video" + "0" + ".mp4");
+        }
     }
-    private byte[] fileToByte(File file)
-    {
-        byte[] file_data = new byte[(int) file.length()];
-        //gelen dosyayi bytelara ata..
+
+    private void writeDataToFile(String path, byte[] data){
         try {
-            FileInputStream fis = new FileInputStream(file);
-            fis.read(file_data);
-            fis.close();
-        }catch (Exception e){
+            FileOutputStream fos = new FileOutputStream(path);
+            fos.write(data);
+            fos.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return file_data;
     }
-
-
-
 
 }
