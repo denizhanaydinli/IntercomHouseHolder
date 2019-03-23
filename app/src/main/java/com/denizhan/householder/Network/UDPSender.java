@@ -2,7 +2,7 @@ package com.denizhan.householder.Network;
 
 /*
     Yazacak Olan: Nehir
-    Açıklama: UDP protokolünde byte gönderme
+    AÃ§Ä±klama: UDP protokolÃ¼nde byte gÃ¶nderme
 */
 
 import com.denizhan.householder.Network.Tools.COMMANDS;
@@ -21,7 +21,7 @@ public class UDPSender {
     // Veri gonderme soketi
     private DatagramSocket sendingSocket;
 
-    // Veri paketini tutmak için datagram paketi
+    // Veri paketini tutmak iÃ§in datagram paketi
     private DatagramPacket sendingPacket;
 
     public UDPSender(String ipAdress){
@@ -37,22 +37,22 @@ public class UDPSender {
 
     public void send(byte[] data){
 
-        // paketi veri boyutuna göre guncelle
+        // paketi veri boyutuna gÃ¶re guncelle
         sendingPacket = new DatagramPacket(data, data.length, local_address, 4445);
         try {
             sendingSocket.send(sendingPacket); // sokete veri yollama
         } catch (IOException e) {
             e.printStackTrace();
-            // OlaGan hata paketin veri boyutunun udp buyuk olması
+            // OlaGan hata paketin veri boyutunun udp buyuk olmasÄ±
         }
     }
     public void sendCommand(COMMANDS command){
-        sendingPacket = new DatagramPacket(command.toString().getBytes(), command.toString().getBytes().length, local_address, 4004); // paketi veri boyutuna göre güncelle
+        sendingPacket = new DatagramPacket(command.toString().getBytes(), command.toString().getBytes().length, local_address, 4004); // paketi veri boyutuna gÃ¶re gÃ¼ncelle
         try {
-            sendingSocket.send(sendingPacket); // sokete veriyi gönder
+            sendingSocket.send(sendingPacket); // sokete veriyi gÃ¶nder
         } catch (IOException e) {
             e.printStackTrace();
-            // Olağan hata paketin veri boyutunun udp büyük olması
+            // OlaÄŸan hata paketin veri boyutunun udp bÃ¼yÃ¼k olmasÄ±
         }
     }
 

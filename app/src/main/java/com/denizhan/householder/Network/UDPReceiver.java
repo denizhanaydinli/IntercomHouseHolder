@@ -2,9 +2,8 @@ package com.denizhan.householder.Network;
 
 /*
     Yazacak Olan: Nehir
-    Açıklama: UDP protokolünde byte alma
+    AÃ§Ä±klama: UDP protokolÃ¼nde byte alma
 */
-
 
 import java.io.IOException;
 import java.net.DatagramPacket;

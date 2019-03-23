@@ -2,7 +2,7 @@ package com.denizhan.householder.Network;
 
 /*
     Yazacak Olan: Nehir
-    Açıklama: Ev sahibine kaydedilen mesajları ve gerçek zamanlı okunan veriyi göndermeye ve karşıdan gönderilen veriyi
+    AÃ§Ä±klama: Ev sahibine kaydedilen mesajlarÄ± ve gerÃ§ek zamanlÄ± okunan veriyi gÃ¶ndermeye ve karÅŸÄ±dan gÃ¶nderilen veriyi
     almaya yaracak class.
 */
 
@@ -92,11 +92,12 @@ public class NetworkConnector {
     private void receive() throws IOException {
         byte [] data = udpReceiver.receive();
         String data_as_str = new String(data);
+        Log.e("****", "data rec");
         if(COMMANDS.TEXT_BEGIN.eqauls(data_as_str)){
             data = udpReceiver.receive();
             data_as_str = new String(data);
             while(!COMMANDS.TEXT_END.eqauls(data_as_str)){
-                ih.activityInstance.messageManager.addTextMessage("~2dk önce", data_as_str);
+                ih.activityInstance.messageManager.addTextMessage("~2dk Ã¶nce", data_as_str);
                 data = udpReceiver.receive();
                 data_as_str = new String(data);
             }
@@ -105,7 +106,7 @@ public class NetworkConnector {
             data_as_str = new String(data);
             while(!COMMANDS.AUDIO_END.eqauls(data_as_str)){
                 writeDataToFile("/storage/emulated/0/sample" + "0" + ".3gp", data);
-                ih.activityInstance.messageManager.addAudioMessage("~5sn önce", "/storage/emulated/0/sample" + "0" + ".3gp");
+                ih.activityInstance.messageManager.addAudioMessage("~5sn Ã¶nce", "/storage/emulated/0/sample" + "0" + ".3gp");
                 data = udpReceiver.receive();
                 data_as_str = new String(data);
             }
@@ -120,7 +121,7 @@ public class NetworkConnector {
             }
             Log.e("***", byteArrayOutputStream.toByteArray().length + " TOTAL");
             writeDataToFile("/storage/emulated/0/video" + "0" + ".mp4", byteArrayOutputStream.toByteArray());
-            ih.activityInstance.messageManager.addVideoMessage("~1dk önce", "/storage/emulated/0/video" + "0" + ".mp4");
+            ih.activityInstance.messageManager.addVideoMessage("~1dk Ã¶nce", "/storage/emulated/0/video" + "0" + ".mp4");
         }
     }
 

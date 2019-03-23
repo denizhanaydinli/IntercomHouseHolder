@@ -1,12 +1,12 @@
 package com.denizhan.householder.Prompter;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.denizhan.householder.ExternalTools.InstanceHolder;
-import com.denizhan.householder.Media.CustomAudioPlayer;
 import com.denizhan.householder.Media.CustomVideoPlayer;
 import com.denizhan.householder.R;
 
@@ -36,11 +36,16 @@ public class VideoPrompter extends Prompter {
         customVideoPlayer = new CustomVideoPlayer(surfaceView);
     }
 
-    public void show(String date, String path) {
+    public void show(final String date, String path) {
         super.show();
-        details_text.setText(date);
-        customVideoPlayer.prepare( "/storage/emulated/0/video" + "0" + ".mp4");
-        customVideoPlayer.start();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                details_text.setText(date);
+                customVideoPlayer.prepare( "/storage/emulated/0/video" + "0" + ".mp4");
+                customVideoPlayer.start();
+            }
+        }, 500);
     }
 
 }
