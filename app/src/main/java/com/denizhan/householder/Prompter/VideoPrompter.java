@@ -1,7 +1,6 @@
 package com.denizhan.householder.Prompter;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +22,7 @@ public class VideoPrompter extends Prompter {
 
         details_text = findViewById(R.id.details_text);
 
-        exitButton = findViewById(R.id.exit_button);
+        exitButton = findViewById(R.id.listen_button);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

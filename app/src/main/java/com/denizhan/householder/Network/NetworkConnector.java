@@ -2,15 +2,13 @@ package com.denizhan.householder.Network;
 
 /*
     Yazacak Olan: Nehir
-    AÃ§Ä±klama: Ev sahibine kaydedilen mesajlarÄ± ve gerÃ§ek zamanlÄ± okunan veriyi gÃ¶ndermeye ve karÅŸÄ±dan gÃ¶nderilen veriyi
+    Açıklama: Ev sahibine kaydedilen mesajlarÄ± ve gerÃ§ek zamanlÄ± okunan veriyi gÃ¶ndermeye ve karÅŸÄ±dan gÃ¶nderilen veriyi
     almaya yaracak class.
 */
 
 import android.util.Log;
-
 import com.denizhan.householder.ExternalTools.InstanceHolder;
 import com.denizhan.householder.Network.Tools.COMMANDS;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -90,6 +88,7 @@ public class NetworkConnector {
     }
 
     private void receive() throws IOException {
+        Log.e("****", "data rec waiting");
         byte [] data = udpReceiver.receive();
         String data_as_str = new String(data);
         Log.e("****", "data rec");
@@ -97,7 +96,7 @@ public class NetworkConnector {
             data = udpReceiver.receive();
             data_as_str = new String(data);
             while(!COMMANDS.TEXT_END.eqauls(data_as_str)){
-                ih.activityInstance.messageManager.addTextMessage("~2dk Ã¶nce", data_as_str);
+                ih.activityInstance.messageManager.addTextMessage("~Xsn önce", data_as_str);
                 data = udpReceiver.receive();
                 data_as_str = new String(data);
             }
@@ -106,7 +105,7 @@ public class NetworkConnector {
             data_as_str = new String(data);
             while(!COMMANDS.AUDIO_END.eqauls(data_as_str)){
                 writeDataToFile("/storage/emulated/0/sample" + "0" + ".3gp", data);
-                ih.activityInstance.messageManager.addAudioMessage("~5sn Ã¶nce", "/storage/emulated/0/sample" + "0" + ".3gp");
+                ih.activityInstance.messageManager.addAudioMessage("~Xsn önce", "/storage/emulated/0/sample" + "0" + ".3gp");
                 data = udpReceiver.receive();
                 data_as_str = new String(data);
             }
@@ -121,7 +120,7 @@ public class NetworkConnector {
             }
             Log.e("***", byteArrayOutputStream.toByteArray().length + " TOTAL");
             writeDataToFile("/storage/emulated/0/video" + "0" + ".mp4", byteArrayOutputStream.toByteArray());
-            ih.activityInstance.messageManager.addVideoMessage("~1dk Ã¶nce", "/storage/emulated/0/video" + "0" + ".mp4");
+            ih.activityInstance.messageManager.addVideoMessage("~Xsn önce", "/storage/emulated/0/video" + "0" + ".mp4");
         }
     }
 

@@ -1,10 +1,12 @@
 package com.denizhan.householder.Prompter;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.denizhan.householder.ExternalTools.InstanceHolder;
+import com.denizhan.householder.ExternalTools.T2S;
 import com.denizhan.householder.Media.CustomAudioPlayer;
 import com.denizhan.householder.R;
 
