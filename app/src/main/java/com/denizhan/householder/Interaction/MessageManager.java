@@ -16,7 +16,7 @@ public class MessageManager {
 
     private InstanceHolder ih;
 
-    int lastPlayedViewID = 0;
+    int lastPlayedViewID = 0; // hold this number to add view hierarchy element from top down
     private TextPrompter textPrompter;
     private AudioPrompter audioPrompter;
     private VideoPrompter videoPrompter;
@@ -31,24 +31,7 @@ public class MessageManager {
     public void addTextMessage(final String date, final String message){
         ih.activityInstance.runOnUiThread(new Runnable() {
             public void run() {
-                int view_id = View.generateViewId();
-                ConstraintLayout constraintLayout = (ConstraintLayout) View.inflate(ih.activityInstance.getApplicationContext(), R.layout.message_view, null);
-                constraintLayout.setId(view_id);
-
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.ALIGN_PARENT_START, 1);
-                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 1);
-                if(lastPlayedViewID == 0){
-                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 1);
-                }else{
-                    params.addRule(RelativeLayout.BELOW, lastPlayedViewID);
-                }
-                lastPlayedViewID = view_id;
-
-                constraintLayout.setLayoutParams(params);
-
-                RelativeLayout relativeLayout = ih.activityInstance.findViewById(R.id.messages_layout);
-                relativeLayout.addView(constraintLayout);
+                ConstraintLayout constraintLayout = addView();
 
                 Button openButton = constraintLayout.findViewById(R.id.open_button);
                 openButton.setOnClickListener(new View.OnClickListener() {
@@ -71,24 +54,7 @@ public class MessageManager {
     public void addAudioMessage(final String date, final String path){
         ih.activityInstance.runOnUiThread(new Runnable() {
             public void run() {
-                int view_id = View.generateViewId();
-                ConstraintLayout constraintLayout = (ConstraintLayout) View.inflate(ih.activityInstance.getApplicationContext(), R.layout.message_view, null);
-                constraintLayout.setId(view_id);
-
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.ALIGN_PARENT_START, 1);
-                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 1);
-                if(lastPlayedViewID == 0){
-                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 1);
-                }else{
-                    params.addRule(RelativeLayout.BELOW, lastPlayedViewID);
-                }
-                lastPlayedViewID = view_id;
-
-                constraintLayout.setLayoutParams(params);
-
-                RelativeLayout relativeLayout = ih.activityInstance.findViewById(R.id.messages_layout);
-                relativeLayout.addView(constraintLayout);
+                ConstraintLayout constraintLayout = addView();
 
                 Button openButton = constraintLayout.findViewById(R.id.open_button);
                 openButton.setOnClickListener(new View.OnClickListener() {
@@ -111,24 +77,7 @@ public class MessageManager {
     public void addVideoMessage(final String date, final String path){
         ih.activityInstance.runOnUiThread(new Runnable() {
             public void run() {
-                int view_id = View.generateViewId();
-                ConstraintLayout constraintLayout = (ConstraintLayout) View.inflate(ih.activityInstance.getApplicationContext(), R.layout.message_view, null);
-                constraintLayout.setId(view_id);
-
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.ALIGN_PARENT_START, 1);
-                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 1);
-                if(lastPlayedViewID == 0){
-                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 1);
-                }else{
-                    params.addRule(RelativeLayout.BELOW, lastPlayedViewID);
-                }
-                lastPlayedViewID = view_id;
-
-                constraintLayout.setLayoutParams(params);
-
-                RelativeLayout relativeLayout = ih.activityInstance.findViewById(R.id.messages_layout);
-                relativeLayout.addView(constraintLayout);
+                ConstraintLayout constraintLayout = addView();
 
                 Button openButton = constraintLayout.findViewById(R.id.open_button);
                 openButton.setOnClickListener(new View.OnClickListener() {
@@ -146,5 +95,28 @@ public class MessageManager {
             }
         });
 
+    }
+
+    private ConstraintLayout addView(){
+        int view_id = View.generateViewId();
+        ConstraintLayout constraintLayout = (ConstraintLayout) View.inflate(ih.activityInstance.getApplicationContext(), R.layout.message_view, null);
+        constraintLayout.setId(view_id);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_START, 1);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 1);
+        if(lastPlayedViewID == 0){
+            params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 1);
+        }else{
+            params.addRule(RelativeLayout.BELOW, lastPlayedViewID);
+        }
+        lastPlayedViewID = view_id;
+
+        constraintLayout.setLayoutParams(params);
+
+        RelativeLayout relativeLayout = ih.activityInstance.findViewById(R.id.messages_layout);
+        relativeLayout.addView(constraintLayout);
+
+        return constraintLayout;
     }
 }
