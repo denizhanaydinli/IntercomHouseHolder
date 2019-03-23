@@ -35,13 +35,14 @@ public class VideoPrompter extends Prompter {
         customVideoPlayer = new CustomVideoPlayer(surfaceView);
     }
 
-    public void show(final String date, String path) {
+    public void show(final String date, final String path) {
         super.show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 details_text.setText(date);
-                customVideoPlayer.prepare( "/storage/emulated/0/video" + "0" + ".mp4");
+                customVideoPlayer.reset();
+                customVideoPlayer.prepare(path, true);
                 customVideoPlayer.start();
             }
         }, 500);

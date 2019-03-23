@@ -9,6 +9,7 @@ package com.denizhan.householder.Network;
 import android.util.Log;
 import com.denizhan.householder.ExternalTools.InstanceHolder;
 import com.denizhan.householder.Media.CustomAudioPlayer;
+import com.denizhan.householder.Media.CustomVideoPlayer;
 import com.denizhan.householder.Network.Tools.COMMANDS;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -122,8 +123,9 @@ public class NetworkConnector {
                 data_as_str = new String(data);
             }
             Log.e("***", byteArrayOutputStream.toByteArray().length + " TOTAL");
-            writeDataToFile("/storage/emulated/0/video" + "0" + ".mp4", byteArrayOutputStream.toByteArray());
-            ih.activityInstance.messageManager.addVideoMessage("~Xsn önce", "/storage/emulated/0/video" + "0" + ".mp4");
+            String video_path = CustomVideoPlayer.requestPath();
+            writeDataToFile(video_path, byteArrayOutputStream.toByteArray());
+            ih.activityInstance.messageManager.addVideoMessage("~Xsn önce", video_path);
         }
     }
 

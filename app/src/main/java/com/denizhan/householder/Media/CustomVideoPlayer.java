@@ -13,7 +13,8 @@ public class CustomVideoPlayer implements ActivityMediaInteractionInterface {
 
     private MediaPlayer media_player;
     private SurfaceView surface_view;
-    public String path = "/storage/emulated/0/video.mp4"; // videonun dosya ismi
+    private static int PLAYING_INDEX = 0; // Oynatma indexi
+    public String path = "/storage/emulated/0/video" + (PLAYING_INDEX) + ".mp4"; // videonun dosya ismi
     private boolean playing = false;
 
 
@@ -76,5 +77,15 @@ public class CustomVideoPlayer implements ActivityMediaInteractionInterface {
         if(this.media_player != null){
             this.media_player.release();
         }
+    }
+
+    public void reset() {
+        if(this.media_player != null){
+            this.media_player.reset();
+        }
+    }
+
+    public static String requestPath(){
+        return "/storage/emulated/0/video" + (PLAYING_INDEX++) + ".mp4";
     }
 }
