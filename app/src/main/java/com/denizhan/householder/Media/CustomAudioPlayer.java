@@ -10,7 +10,7 @@ public class CustomAudioPlayer implements ActivityMediaInteractionInterface {
 
     private MediaPlayer player; // Android'in kendi medya oynatıcısı
     private boolean playing; // Oynuyor mu oynamıyor mu anlamak için boolean
-    private int PLAYING_INDEX = 0; // Oynatma indexi
+    private static int PLAYING_INDEX = 0; // Oynatma indexi
     private String FILE_PATH = "/storage/emulated/0/sample" + PLAYING_INDEX + ".3gp"; // Dosya yolu
     private ProgressBar timebar; // Activity den alınacak progressbar zaman gösterimi için kullanılacak
     private Thread timebarthread; // Progressbarın animasyonu için kullanılacak thread
@@ -53,11 +53,18 @@ public class CustomAudioPlayer implements ActivityMediaInteractionInterface {
         prepare();
     }
 
-    public void prepare(int index, boolean looping) // Direk index alarak dosyayı hazırlama
+    public void prepare(String path, boolean looping) // Direk index alarak dosyayı hazırlama
     {
-        setFileIndex(index);
-        player.setLooping(looping);
-        prepare();
+        try
+        {
+            player.setDataSource(path); // Oynatılacak dosyayı seç
+            player.setLooping(looping);
+            player.prepare(); // Oynatma için hazırlan
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -75,9 +82,9 @@ public class CustomAudioPlayer implements ActivityMediaInteractionInterface {
     {
         player.stop(); // Oynatmayı durdur
         playing = false;
-        if(timebar != null) { // Eğer progressbar verilmiş ise animasyonu bitir
+       /* if(timebar != null) { // Eğer progressbar verilmiş ise animasyonu bitir
             timebarthread = null;
-        }
+        }*/
     }
 
     @Override
@@ -85,17 +92,17 @@ public class CustomAudioPlayer implements ActivityMediaInteractionInterface {
     {
         player.release(); // MediaPlayer objesini ve kullandığı kaynakları temizle
         playing = false;
-        if(timebarthread != null) { // Eğer progressbar verilmiş ise animasyonu bitir
+        /*if(timebarthread != null) { // Eğer progressbar verilmiş ise animasyonu bitir
             timebarthread = null;
-        }
+        }*/
     }
 
     public void reset(){
         player.reset();
         playing = false;
-        if(timebarthread != null) { // Eğer progressbar verilmiş ise animasyonu bitir
+        /*if(timebarthread != null) { // Eğer progressbar verilmiş ise animasyonu bitir
             timebarthread = null;
-        }
+        }*/
     }
 
     public void setFileIndex(int index)
@@ -155,5 +162,9 @@ public class CustomAudioPlayer implements ActivityMediaInteractionInterface {
             }
         };
         timebarthread = new Thread(timebarrunnable); // Kayıt sırasında progressbarı oynatmak için gerekli thread
+    }
+
+    public static String requestPath(){
+        return "/storage/emulated/0/sample" + (PLAYING_INDEX++) + ".3gp";
     }
 }

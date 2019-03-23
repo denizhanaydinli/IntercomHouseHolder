@@ -8,6 +8,7 @@ package com.denizhan.householder.Network;
 
 import android.util.Log;
 import com.denizhan.householder.ExternalTools.InstanceHolder;
+import com.denizhan.householder.Media.CustomAudioPlayer;
 import com.denizhan.householder.Network.Tools.COMMANDS;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -104,8 +105,10 @@ public class NetworkConnector {
             data = udpReceiver.receive();
             data_as_str = new String(data);
             while(!COMMANDS.AUDIO_END.eqauls(data_as_str)){
-                writeDataToFile("/storage/emulated/0/sample" + "0" + ".3gp", data);
-                ih.activityInstance.messageManager.addAudioMessage("~Xsn önce", "/storage/emulated/0/sample" + "0" + ".3gp");
+                //writeDataToFile("/storage/emulated/0/sample" + "0" + ".3gp", data);
+                String audio_path = CustomAudioPlayer.requestPath();
+                writeDataToFile(audio_path, data);
+                ih.activityInstance.messageManager.addAudioMessage("~Xsn önce", audio_path);
                 data = udpReceiver.receive();
                 data_as_str = new String(data);
             }

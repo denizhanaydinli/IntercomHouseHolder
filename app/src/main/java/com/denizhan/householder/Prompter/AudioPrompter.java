@@ -40,7 +40,7 @@ public class AudioPrompter extends Prompter {
     public void show(String date, String path) {
         details_text.setText(date);
         customAudioPlayer.reset();
-        customAudioPlayer.prepare(true);
+        customAudioPlayer.prepare(path, true);
         customAudioPlayer.start();
         super.show();
     }
